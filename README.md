@@ -1,27 +1,27 @@
 <div align="center">
 
-  <a href="https://github.com/orhun/runst">
-    <img src="assets/runst-logo.png" width="300">
+  <a href="https://github.com/ellsclytn/nofi">
+    <img src="assets/nofi-logo.png" width="300">
   </a>
 
-<h4><strong><code>runst</code></strong> — A dead simple notification daemon 🦡</h4>
+<h4><strong><code>nofi</code></strong> — A dead simple notification daemon 🦡</h4>
 
-<a href="https://github.com/orhun/runst/releases"><img src="https://img.shields.io/github/v/release/orhun/runst?style=flat&amp;labelColor=56534b&amp;color=c1c1b6&amp;logo=GitHub&amp;logoColor=white" alt="GitHub Release"></a>
-<a href="https://crates.io/crates/runst/"><img src="https://img.shields.io/crates/v/runst?style=flat&amp;labelColor=56534b&amp;color=c1c1b6&amp;logo=Rust&amp;logoColor=white" alt="Crate Release"></a>
-<a href="https://github.com/orhun/runst/actions?query=workflow%3A%22Continuous+Integration%22"><img src="https://img.shields.io/github/actions/workflow/status/orhun/runst/ci.yml?branch=main&amp;style=flat&amp;labelColor=56534b&amp;color=c1c1b6&amp;logo=GitHub%20Actions&amp;logoColor=white" alt="Continuous Integration"></a>
-<a href="https://github.com/orhun/runst/actions?query=workflow%3A%22Continuous+Deployment%22"><img src="https://img.shields.io/github/actions/workflow/status/orhun/runst/cd.yml?style=flat&amp;labelColor=56534b&amp;color=c1c1b6&amp;logo=GitHub%20Actions&amp;logoColor=white&amp;label=deploy" alt="Continuous Deployment"></a>
-<a href="https://docs.rs/runst/"><img src="https://img.shields.io/docsrs/runst?style=flat&amp;labelColor=56534b&amp;color=c1c1b6&amp;logo=Rust&amp;logoColor=white" alt="Documentation"></a>
+<a href="https://github.com/ellsclytn/nofi/releases"><img src="https://img.shields.io/github/v/release/ellsclytn/nofi?style=flat&amp;labelColor=56534b&amp;color=c1c1b6&amp;logo=GitHub&amp;logoColor=white" alt="GitHub Release"></a>
+<a href="https://crates.io/crates/nofi/"><img src="https://img.shields.io/crates/v/nofi?style=flat&amp;labelColor=56534b&amp;color=c1c1b6&amp;logo=Rust&amp;logoColor=white" alt="Crate Release"></a>
+<a href="https://github.com/ellsclytn/nofi/actions?query=workflow%3A%22Continuous+Integration%22"><img src="https://img.shields.io/github/actions/workflow/status/ellsclytn/nofi/ci.yml?branch=main&amp;style=flat&amp;labelColor=56534b&amp;color=c1c1b6&amp;logo=GitHub%20Actions&amp;logoColor=white" alt="Continuous Integration"></a>
+<a href="https://github.com/ellsclytn/nofi/actions?query=workflow%3A%22Continuous+Deployment%22"><img src="https://img.shields.io/github/actions/workflow/status/ellsclytn/nofi/cd.yml?style=flat&amp;labelColor=56534b&amp;color=c1c1b6&amp;logo=GitHub%20Actions&amp;logoColor=white&amp;label=deploy" alt="Continuous Deployment"></a>
+<a href="https://docs.rs/nofi/"><img src="https://img.shields.io/docsrs/nofi?style=flat&amp;labelColor=56534b&amp;color=c1c1b6&amp;logo=Rust&amp;logoColor=white" alt="Documentation"></a>
 
 </div>
 
 [Desktop notifications](https://wiki.archlinux.org/title/Desktop_notifications) are small, passive popup dialogs that notify the user of particular events in an asynchronous manner. These passive popups can automatically disappear after a short period of time.
 
-`runst` is the server implementation of [freedesktop.org](https://www.freedesktop.org/wiki) - [Desktop Notifications Specification](https://specifications.freedesktop.org/notification-spec/notification-spec-latest.html) and it can be used to receive notifications from applications via [D-Bus](https://www.freedesktop.org/wiki/Software/dbus/). As of now, only [X11](https://en.wikipedia.org/wiki/X_Window_System) is supported.
+`nofi` is the server implementation of [freedesktop.org](https://www.freedesktop.org/wiki) - [Desktop Notifications Specification](https://specifications.freedesktop.org/notification-spec/notification-spec-latest.html) and it can be used to receive notifications from applications via [D-Bus](https://www.freedesktop.org/wiki/Software/dbus/). As of now, only [X11](https://en.wikipedia.org/wiki/X_Window_System) is supported.
 
 <div align="center">
 
-  <a href="https://github.com/orhun/runst">
-    <img src="assets/runst-demo.gif">
+  <a href="https://github.com/ellsclytn/nofi">
+    <img src="assets/nofi-demo.gif">
   </a>
 
 </div>
@@ -35,47 +35,47 @@
 
 ## Roadmap
 
-`runst` is initially designed to show a simple notification window. On top of that, it combines customization-oriented and semi-innovative features. In the future, I'm aiming to shape `runst` functionality based on new ideas and feedback.
+`nofi` is initially designed to show a simple notification window. On top of that, it combines customization-oriented and semi-innovative features. In the future, I'm aiming to shape `nofi` functionality based on new ideas and feedback.
 
-Feel free to [submit an issue](https://github.com/orhun/runst/issues/new) if you have something in mind or having a problem!
+Feel free to [submit an issue](https://github.com/ellsclytn/nofi/issues/new) if you have something in mind or having a problem!
 
 ## Installation
 
 ### From crates.io
 
-`runst` can be installed from [crates.io](https://crates.io/crates/runst):
+`nofi` can be installed from [crates.io](https://crates.io/crates/nofi):
 
 ```sh
-$ cargo install runst
+$ cargo install nofi
 ```
 
 The minimum supported Rust version is `1.64.0`.
 
 ### Arch Linux
 
-`runst` can be installed from the [community repository](https://archlinux.org/packages/community/x86_64/runst/) using [pacman](https://wiki.archlinux.org/title/Pacman):
+`nofi` can be installed from the [community repository](https://archlinux.org/packages/community/x86_64/nofi/) using [pacman](https://wiki.archlinux.org/title/Pacman):
 
 ```sh
-$ pacman -S runst
+$ pacman -S nofi
 ```
 
-Or you can install the available [AUR packages](https://aur.archlinux.org/packages?O=0&SeB=nd&K=runst&outdated=&SB=p&SO=d&PP=50&submit=Go) with using an [AUR helper](https://wiki.archlinux.org/title/AUR_helpers). For example:
+Or you can install the available [AUR packages](https://aur.archlinux.org/packages?O=0&SeB=nd&K=nofi&outdated=&SB=p&SO=d&PP=50&submit=Go) with using an [AUR helper](https://wiki.archlinux.org/title/AUR_helpers). For example:
 
 ```sh
-$ paru -S runst-git
+$ paru -S nofi-git
 ```
 
 ### Alpine Linux
 
-`runst` is available for [Alpine Edge](https://pkgs.alpinelinux.org/packages?name=runst&branch=edge). It can be installed via [apk](https://wiki.alpinelinux.org/wiki/Alpine_Package_Keeper) after enabling the [testing repository](https://wiki.alpinelinux.org/wiki/Repositories).
+`nofi` is available for [Alpine Edge](https://pkgs.alpinelinux.org/packages?name=nofi&branch=edge). It can be installed via [apk](https://wiki.alpinelinux.org/wiki/Alpine_Package_Keeper) after enabling the [testing repository](https://wiki.alpinelinux.org/wiki/Repositories).
 
 ```sh
-apk add runst
+apk add nofi
 ```
 
 ### Binary releases
 
-See the available binaries for different operating systems/architectures from the [releases page](https://github.com/orhun/runst/releases).
+See the available binaries for different operating systems/architectures from the [releases page](https://github.com/ellsclytn/nofi/releases).
 
 Release tarballs are signed with the following PGP key: [AEF8C7261F4CEB41A448CBC41B250A9F78535D1A](https://keyserver.ubuntu.com/pks/lookup?search=0x1B250A9F78535D1A&op=vindex)
 
@@ -92,7 +92,7 @@ Release tarballs are signed with the following PGP key: [AEF8C7261F4CEB41A448CBC
 1. Clone the repository.
 
 ```sh
-$ git clone https://github.com/orhun/runst && cd runst/
+$ git clone https://github.com/ellsclytn/nofi && cd nofi/
 ```
 
 2. Build.
@@ -101,30 +101,30 @@ $ git clone https://github.com/orhun/runst && cd runst/
 $ CARGO_TARGET_DIR=target cargo build --release
 ```
 
-Binary will be located at `target/release/runst`.
+Binary will be located at `target/release/nofi`.
 
 ## Usage
 
 ### On Xorg startup
 
-You can use [xinitrc](#xinitrc) or [xprofile](#xprofile) for autostarting `runst`.
+You can use [xinitrc](#xinitrc) or [xprofile](#xprofile) for autostarting `nofi`.
 
 #### xinitrc
 
-If you are starting Xorg manually with [xinit](https://www.x.org/archive/X11R6.8.0/doc/xinit.1.html), you can `runst` on X server startup via [xinitrc](https://wiki.archlinux.org/title/Xinit#xinitrc):
+If you are starting Xorg manually with [xinit](https://www.x.org/archive/X11R6.8.0/doc/xinit.1.html), you can `nofi` on X server startup via [xinitrc](https://wiki.archlinux.org/title/Xinit#xinitrc):
 
 `$HOME/.xinitrc`:
 
 ```sh
-runst &
+nofi &
 ```
 
 Long-running programs such as notification daemons should be started before the window manager, so they should either fork themself or be run in the background via appending `&` sign. Otherwise, the script would halt and wait for each program to exit before executing the window manager or desktop environment.
 
-In the case of `runst` not being available since it's started at a faster manner than the window manager, you can add a delay as shown in the example below:
+In the case of `nofi` not being available since it's started at a faster manner than the window manager, you can add a delay as shown in the example below:
 
 ```sh
-{ sleep 2; runst; } &
+{ sleep 2; nofi; } &
 ```
 
 #### xprofile
@@ -135,23 +135,23 @@ The xprofile file, which is `~/.xprofile` or `/etc/xprofile`, can be styled simi
 
 ### As a D-Bus service
 
-You can create a D-Bus service to launch `runst` automatically on the first notification action. For example, you can create the following service configuration:
+You can create a D-Bus service to launch `nofi` automatically on the first notification action. For example, you can create the following service configuration:
 
-`/usr/share/dbus-1/services/org.orhun.runst.service`:
+`/usr/share/dbus-1/services/org.ellsclytn.nofi.service`:
 
 ```ini
 [D-BUS Service]
 Name=org.freedesktop.Notifications
-Exec=/usr/bin/runst
+Exec=/usr/bin/nofi
 ```
 
-Whenever an application sends a notification by sending a signal to `org.freedesktop.Notifications`, D-Bus activates `runst`.
+Whenever an application sends a notification by sending a signal to `org.freedesktop.Notifications`, D-Bus activates `nofi`.
 
-Also, see [**#1**](https://github.com/orhun/runst/issues/1) for systemd integration.
+Also, see [**#1**](https://github.com/ellsclytn/nofi/issues/1) for systemd integration.
 
 ## Commands
 
-`runst` can be controlled with sending commands to D-Bus via [`dbus-send(1)`](https://man.archlinux.org/man/dbus-send.1.en).
+`nofi` can be controlled with sending commands to D-Bus via [`dbus-send(1)`](https://man.archlinux.org/man/dbus-send.1.en).
 
 ```sh
 dbus-send --print-reply --dest=org.freedesktop.Notifications /org/freedesktop/Notifications/ctl "org.freedesktop.Notifications.${command}"
@@ -193,14 +193,14 @@ dbus-send --print-reply --dest=org.freedesktop.Notifications /org/freedesktop/No
 
 ## Configuration
 
-`runst` configuration file supports [TOML](https://github.com/toml-lang/toml) format and the default configuration values can be found [here](./config/runst.toml).
+`nofi` configuration file supports [TOML](https://github.com/toml-lang/toml) format and the default configuration values can be found [here](./config/nofi.toml).
 
 If exists, configuration file is read from the following default locations:
 
-- `$HOME/.config/runst/runst.toml`
-- `$HOME/.runst/runst.toml`
+- `$HOME/.config/nofi/nofi.toml`
+- `$HOME/.nofi/nofi.toml`
 
-You can also specify a path via `RUNST_CONFIG` environment variable.
+You can also specify a path via `nofi_CONFIG` environment variable.
 
 ### Global configuration
 
@@ -250,7 +250,7 @@ Context is the model that holds the required data for template rendering. The [J
 
 ```json
 {
-  "app_name": "runst",
+  "app_name": "nofi",
   "summary": "example",
   "body": "this is a notification 🦡",
   "urgency": "normal",
@@ -277,7 +277,7 @@ There are 3 levels of urgency defined in the [Freedesktop](https://specification
 2. `normal`: e.g. "you got mail"
 3. `critical`: e.g. "your computer is on fire!"
 
-You can configure `runst` to act differently based on these urgency levels. For this, there need to be 3 different sections defined in the configuration file. Each of these sections has the following fields:
+You can configure `nofi` to act differently based on these urgency levels. For this, there need to be 3 different sections defined in the configuration file. Each of these sections has the following fields:
 
 ```toml
 [urgency_{level}] # urgency_low, urgency_normal or urgency_critical
@@ -342,11 +342,11 @@ In this hypothetical example, we are sending a [Gotify](https://gotify.net/) not
 
 I have been a user of [dunst](https://github.com/dunst-project/dunst) for a long time. However, they made some [uncool breaking changes](https://github.com/dunst-project/dunst/issues/940) in [v1.7.0](https://github.com/dunst-project/dunst/releases/tag/v1.7.0) and it completely broke my configuration. That day, I refused to update `dunst` (I was too lazy to re-configure) and decided to write my own notification server using Rust.
 
-I wanted to keep `runst` simple since the way I use `dunst` was really simple. I was only showing an overlay window on top of [i3status](https://github.com/i3/i3status) as shown below:
+I wanted to keep `nofi` simple since the way I use `dunst` was really simple. I was only showing an overlay window on top of [i3status](https://github.com/i3/i3status) as shown below:
 
-![runst use case](assets/runst-demo2.gif)
+![nofi use case](assets/nofi-demo2.gif)
 
-And that's how `runst` is born.
+And that's how `nofi` is born.
 
 ## Similar projects
 
@@ -358,4 +358,4 @@ Licensed under either of [Apache License Version 2.0](http://www.apache.org/lice
 
 ## Copyright
 
-Copyright © 2022-2023, [Orhun Parmaksız](mailto:orhunparmaksiz@gmail.com)
+Copyright © 2022-2023, [Ellis Clayton](mailto:ellis@ellis.codes)

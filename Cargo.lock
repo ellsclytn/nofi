@@ -797,6 +797,34 @@ dependencies = [
 ]
 
 [[package]]
+name = "nofi"
+version = "0.1.0"
+dependencies = [
+ "cairo-rs",
+ "colorsys",
+ "dbus",
+ "dbus-codegen",
+ "dbus-crossroads",
+ "dirs",
+ "estimated_read_time",
+ "humantime",
+ "pango",
+ "pangocairo",
+ "regex",
+ "rust-embed",
+ "serde",
+ "serde_json",
+ "serde_regex",
+ "sscanf",
+ "tera",
+ "thiserror",
+ "toml",
+ "tracing",
+ "tracing-subscriber",
+ "x11rb",
+]
+
+[[package]]
 name = "nu-ansi-term"
 version = "0.46.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1153,34 +1181,6 @@ name = "rle-decode-fast"
 version = "1.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3582f63211428f83597b51b2ddb88e2a91a9d52d12831f9d08f5e624e8977422"
-
-[[package]]
-name = "runst"
-version = "0.1.4"
-dependencies = [
- "cairo-rs",
- "colorsys",
- "dbus",
- "dbus-codegen",
- "dbus-crossroads",
- "dirs",
- "estimated_read_time",
- "humantime",
- "pango",
- "pangocairo",
- "regex",
- "rust-embed",
- "serde",
- "serde_json",
- "serde_regex",
- "sscanf",
- "tera",
- "thiserror",
- "toml",
- "tracing",
- "tracing-subscriber",
- "x11rb",
-]
 
 [[package]]
 name = "rust-embed"

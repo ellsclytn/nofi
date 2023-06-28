@@ -1,13 +1,13 @@
 [package]
-name = "runst"
-version = "0.1.4" # bumped by release.sh
-description = "A dead simple notification daemon 🦡"
-authors = ["Orhun Parmaksız <orhunparmaksiz@gmail.com>"]
-license = "MIT OR Apache-2.0"
+name = "nofi"
+version = "0.1.0" # bumped by release.sh
+description = "A notification daemon for Rofi"
+authors = ["Ellis Clayton <ellis@ellis.codes>"]
+license = "MIT"
 readme = "README.md"
-homepage = "https://github.com/orhun/runst"
-repository = "https://github.com/orhun/runst"
-keywords = ["notification", "daemon", "dbus", "notify", "x11"]
+homepage = "https://github.com/ellsclytn/nofi"
+repository = "https://github.com/ellsclytn/nofi"
+keywords = ["notification", "daemon", "dbus", "notify", "rofi"]
 categories = ["command-line-utilities"]
 include = ["src/**/*", "dbus/*", "config/*", "build.rs", "Cargo.*", "LICENSE-*", "*.md"]
 edition = "2021"

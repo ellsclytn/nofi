@@ -1,7 +1,7 @@
 use std::process;
 
 fn main() {
-    match runst::run() {
+    match nofi::run() {
         Ok(_) => process::exit(0),
         Err(e) => {
             eprintln!("{e}");

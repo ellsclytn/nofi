@@ -17,7 +17,7 @@ use tera::Tera;
 use tracing::Level;
 
 /// Environment variable for the configuration file.
-const CONFIG_ENV: &str = "RUNST_CONFIG";
+const CONFIG_ENV: &str = "NOFI_CONFIG";
 
 /// Name of the default configuration file.
 const DEFAULT_CONFIG: &str = concat!(env!("CARGO_PKG_NAME"), ".toml");

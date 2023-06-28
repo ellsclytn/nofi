@@ -10,4 +10,4 @@ The following versions are supported with security updates:
 
 ## Reporting a Vulnerability
 
-Please use the [GitHub Security Advisories](https://github.com/orhun/runst/security/advisories/new) feature to report vulnerabilities.
+Please use the [GitHub Security Advisories](https://github.com/ellsclytn/nofi/security/advisories/new) feature to report vulnerabilities.

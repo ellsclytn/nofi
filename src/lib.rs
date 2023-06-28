@@ -30,7 +30,7 @@ use std::thread;
 use std::time::Duration;
 use tracing_subscriber::EnvFilter;
 
-/// Runs `runst`.
+/// Runs `nofi`.
 pub fn run() -> Result<()> {
     let config = Arc::new(Config::parse()?);
 

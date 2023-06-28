@@ -64,15 +64,15 @@ jobs:
         run: |
           mkdir release/
           cp {LICENSE-*,README.md,CHANGELOG.md} release/
-          cp target/${{matrix.TARGET}}/release/runst release/
-          mv release/ runst-${{env.RELEASE_VERSION}}/
+          cp target/${{matrix.TARGET}}/release/nofi release/
+          mv release/ nofi-${{env.RELEASE_VERSION}}/
 
       - name: Create release artifacts
         run: |
-          tar -czvf runst-${{env.RELEASE_VERSION}}-${{matrix.TARGET}}.tar.gz \
-            runst-${{env.RELEASE_VERSION}}/
-          sha512sum runst-${{env.RELEASE_VERSION}}-${{matrix.TARGET}}.tar.gz \
-            > runst-${{env.RELEASE_VERSION}}-${{matrix.TARGET}}.tar.gz.sha512
+          tar -czvf nofi-${{env.RELEASE_VERSION}}-${{matrix.TARGET}}.tar.gz \
+            nofi-${{env.RELEASE_VERSION}}/
+          sha512sum nofi-${{env.RELEASE_VERSION}}-${{matrix.TARGET}}.tar.gz \
+            > nofi-${{env.RELEASE_VERSION}}-${{matrix.TARGET}}.tar.gz.sha512
 
       - name: Sign the release
         run: |
@@ -81,12 +81,12 @@ jobs:
             --passphrase-fd 0 --import private.key
           echo "${{secrets.GPG_PASSPHRASE}}" | gpg --pinentry-mode=loopback \
             --passphrase-fd 0 --detach-sign \
-            runst-${{env.RELEASE_VERSION}}-${{matrix.TARGET}}.tar.gz
+            nofi-${{env.RELEASE_VERSION}}-${{matrix.TARGET}}.tar.gz
 
       - name: Upload the binary releases
         uses: svenstaro/upload-release-action@v2
         with:
-          file: runst-${{env.RELEASE_VERSION}}-${{matrix.TARGET}}*
+          file: nofi-${{env.RELEASE_VERSION}}-${{matrix.TARGET}}*
           file_glob: true
           overwrite: true
           tag: ${{ github.ref }}

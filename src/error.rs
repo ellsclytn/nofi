@@ -12,14 +12,6 @@ pub enum Error {
     DbusString(String),
     #[error("D-Bus argument error: `{0}`")]
     DbusArgument(String),
-    #[error("X11 connect error: `{0}`")]
-    X11Connect(#[from] x11rb::errors::ConnectError),
-    #[error("X11 connection error: `{0}`")]
-    X11Connection(#[from] x11rb::errors::ConnectionError),
-    #[error("X11 ID error: `{0}`")]
-    X11Id(#[from] x11rb::errors::ReplyOrIdError),
-    #[error("X11 error: `{0}`")]
-    X11Other(String),
     #[error("Cairo error: `{0}`")]
     Cairo(#[from] cairo::Error),
     #[error("Receiver error: `{0}`")]

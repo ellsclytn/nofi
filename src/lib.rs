@@ -8,9 +8,6 @@ pub mod error;
 /// D-Bus handler.
 pub mod dbus;
 
-/// X11 handler.
-pub mod x11;
-
 /// Configuration.
 pub mod config;
 
@@ -21,7 +18,6 @@ use crate::config::Config;
 use crate::dbus::{DbusClient, DbusServer};
 use crate::error::Result;
 use crate::notification::Action;
-use crate::x11::X11;
 use estimated_read_time::Options;
 use notification::Manager;
 use std::sync::mpsc;
@@ -44,37 +40,31 @@ pub fn run() -> Result<()> {
     tracing::trace!("{:#?}", config);
     tracing::info!("starting");
 
-    let mut x11 = X11::init(None)?;
-    let window = x11.create_window(&config.global)?;
     let dbus_server = DbusServer::init()?;
     let dbus_client = Arc::new(DbusClient::init()?);
     let timeout = Duration::from_millis(1000);
 
-    let x11 = Arc::new(x11);
-    let window = Arc::new(window);
     let notifications = Manager::init();
 
-    let x11_cloned = Arc::clone(&x11);
-    let window_cloned = Arc::clone(&window);
     let dbus_client_cloned = Arc::clone(&dbus_client);
     let config_cloned = Arc::clone(&config);
     let notifications_cloned = notifications.clone();
 
-    thread::spawn(move || {
-        if let Err(e) = x11_cloned.handle_events(
-            window_cloned,
-            notifications_cloned,
-            config_cloned,
-            |notification| {
-                tracing::debug!("user input detected");
-                dbus_client_cloned
-                    .close_notification(notification.id, timeout)
-                    .expect("failed to close notification");
-            },
-        ) {
-            eprintln!("Failed to handle X11 events: {e}")
-        }
-    });
+    // thread::spawn(move || {
+    //     if let Err(e) = x11_cloned.handle_events(
+    //         window_cloned,
+    //         notifications_cloned,
+    //         config_cloned,
+    //         |notification| {
+    //             tracing::debug!("user input detected");
+    //             dbus_client_cloned
+    //                 .close_notification(notification.id, timeout)
+    //                 .expect("failed to close notification");
+    //         },
+    //     ) {
+    //         eprintln!("Failed to handle X11 events: {e}")
+    //     }
+    // });
 
     let (sender, receiver) = mpsc::channel();
 
@@ -94,7 +84,6 @@ pub fn run() -> Result<()> {
         )?;
     }
 
-    let x11_cloned = Arc::clone(&x11);
     loop {
         match receiver.recv()? {
             Action::Show(notification) => {
@@ -103,7 +92,7 @@ pub fn run() -> Result<()> {
                     let urgency_config = config.get_urgency_config(&notification.urgency);
                     Duration::from_secs(if urgency_config.auto_clear.unwrap_or(false) {
                         notification
-                            .render_message(&window.template, urgency_config.text, 0)
+                            .render_message(urgency_config.text, 0)
                             .map(|v| estimated_read_time::text(&v, &Options::default()).seconds())
                             .unwrap_or_default()
                     } else {
@@ -124,18 +113,16 @@ pub fn run() -> Result<()> {
                     });
                 }
                 notifications.add(notification);
-                x11_cloned.hide_window(&window)?;
-                x11_cloned.show_window(&window)?;
             }
             Action::ShowLast => {
                 tracing::debug!("showing the last notification");
                 if notifications.count() == 0 {
                     continue;
                 } else if notifications.mark_next_as_unread() {
-                    x11_cloned.hide_window(&window)?;
-                    x11_cloned.show_window(&window)?;
+                    // x11_cloned.hide_window(&window)?;
+                    // x11_cloned.show_window(&window)?;
                 } else {
-                    x11_cloned.hide_window(&window)?;
+                    // x11_cloned.hide_window(&window)?;
                 }
             }
             Action::Close(id) => {
@@ -146,15 +133,15 @@ pub fn run() -> Result<()> {
                     tracing::debug!("closing the last notification");
                     notifications.mark_last_as_read();
                 }
-                x11_cloned.hide_window(&window)?;
+                // x11_cloned.hide_window(&window)?;
                 if notifications.get_unread_count() >= 1 {
-                    x11_cloned.show_window(&window)?;
+                    //     x11_cloned.show_window(&window)?;
                 }
             }
             Action::CloseAll => {
                 tracing::debug!("closing all notifications");
                 notifications.mark_all_as_read();
-                x11_cloned.hide_window(&window)?;
+                // x11_cloned.hide_window(&window)?;
             }
         }
     }

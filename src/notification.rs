@@ -83,26 +83,31 @@ impl Notification {
     /// Renders the notification message using the given template.
     pub fn render_message(
         &self,
-        template: &Tera,
         urgency_text: Option<String>,
         unread_count: usize,
     ) -> Result<String> {
-        match template.render(
-            NOTIFICATION_MESSAGE_TEMPLATE,
-            &self.into_context(
-                urgency_text.unwrap_or_else(|| self.urgency.to_string()),
-                unread_count,
-            )?,
-        ) {
-            Ok(v) => Ok::<String, Error>(v),
-            Err(e) => {
-                if let Some(error_source) = e.source() {
-                    Err(Error::TemplateRender(error_source.to_string()))
-                } else {
-                    Err(Error::Template(e))
-                }
-            }
+        if let Some(u) = urgency_text {
+            println!("URGENCY_TEXT: {}", u);
         }
+        println!("COUNT: {}", unread_count);
+        println!("{:#?}", self);
+        // match template.render(
+        //     NOTIFICATION_MESSAGE_TEMPLATE,
+        //     &self.into_context(
+        //         urgency_text.unwrap_or_else(|| self.urgency.to_string()),
+        //         unread_count,
+        //     )?,
+        // ) {
+        //     Ok(v) => Ok::<String, Error>(v),
+        //     Err(e) => {
+        //         if let Some(error_source) = e.source() {
+        //             Err(Error::TemplateRender(error_source.to_string()))
+        //         } else {
+        //             Err(Error::Template(e))
+        //         }
+        //     }
+        // }
+        Ok("".to_string())
     }
 
     /// Returns true if the given filter matches the notification message.

@@ -17,13 +17,15 @@ pub mod notification;
 use crate::config::Config;
 use crate::dbus::{DbusClient, DbusServer};
 use crate::error::Result;
-use crate::notification::Action;
+use crate::notification::{Action, NOTIFICATION_MESSAGE_TEMPLATE};
 use estimated_read_time::Options;
 use notification::Manager;
+use rofi;
 use std::sync::mpsc;
 use std::sync::Arc;
 use std::thread;
 use std::time::Duration;
+use tera::Tera;
 use tracing_subscriber::EnvFilter;
 
 /// Runs `nofi`.
@@ -45,6 +47,12 @@ pub fn run() -> Result<()> {
     let timeout = Duration::from_millis(1000);
 
     let notifications = Manager::init();
+    let config_cloned = Arc::clone(&config);
+    let mut template = Tera::default();
+    template.add_raw_template(
+        NOTIFICATION_MESSAGE_TEMPLATE,
+        &config_cloned.global.template,
+    )?;
 
     let dbus_client_cloned = Arc::clone(&dbus_client);
     let config_cloned = Arc::clone(&config);
@@ -75,15 +83,6 @@ pub fn run() -> Result<()> {
             .expect("failed to register D-Bus notification handler");
     });
 
-    if config.global.startup_notification {
-        dbus_client.notify(
-            env!("CARGO_PKG_NAME"),
-            "startup",
-            &format!("{} is up and running 🦡", env!("CARGO_PKG_NAME")),
-            -1,
-        )?;
-    }
-
     loop {
         match receiver.recv()? {
             Action::Show(notification) => {
@@ -92,7 +91,7 @@ pub fn run() -> Result<()> {
                     let urgency_config = config.get_urgency_config(&notification.urgency);
                     Duration::from_secs(if urgency_config.auto_clear.unwrap_or(false) {
                         notification
-                            .render_message(urgency_config.text, 0)
+                            .render_message(&template, urgency_config.text, 0)
                             .map(|v| estimated_read_time::text(&v, &Options::default()).seconds())
                             .unwrap_or_default()
                     } else {
@@ -103,27 +102,45 @@ pub fn run() -> Result<()> {
                     tracing::debug!("notification timeout: {}ms", timeout.as_millis());
                     let dbus_client_cloned = Arc::clone(&dbus_client);
                     let notifications_cloned = notifications.clone();
-                    thread::spawn(move || {
-                        thread::sleep(timeout);
-                        if notifications_cloned.is_unread(notification.id) {
-                            dbus_client_cloned
-                                .close_notification(notification.id, timeout)
-                                .expect("failed to close notification");
-                        }
-                    });
+                    // thread::spawn(move || {
+                    //     thread::sleep(timeout);
+                    //     if notifications_cloned.is_unread(notification.id) {
+                    //         dbus_client_cloned
+                    //             .close_notification(notification.id, timeout)
+                    //             .expect("failed to close notification");
+                    //     }
+                    // });
                 }
                 notifications.add(notification);
             }
             Action::ShowLast => {
                 tracing::debug!("showing the last notification");
-                if notifications.count() == 0 {
-                    continue;
-                } else if notifications.mark_next_as_unread() {
-                    // x11_cloned.hide_window(&window)?;
-                    // x11_cloned.show_window(&window)?;
+                let notifications = notifications.all_unread();
+                if notifications.len() == 0 {
+                    let notification = ["No notifications".to_owned()];
+                    let _no_notifications = rofi::Rofi::new(&notification).run_index();
                 } else {
-                    // x11_cloned.hide_window(&window)?;
-                }
+                    let notifications: Vec<String> = notifications
+                        .iter()
+                        .map(|n| {
+                            let urgency_config = config.get_urgency_config(&n.urgency);
+                            let render = n.render_message(&template, urgency_config.text, 0);
+                            match render {
+                                Ok(v) => v,
+                                Err(e) => {
+                                    tracing::error!("error rendering notification: {}", e);
+                                    "Failed to render notification".to_string()
+                                }
+                            }
+                        })
+                        .collect();
+                    match rofi::Rofi::new(&notifications).run_index() {
+                        Ok(element) => println!("Choice: {:#?}", notifications[element]),
+                        Err(rofi::Error::Interrupted) => println!("Interrupted"),
+                        Err(rofi::Error::NotFound) => println!("User input was not found"),
+                        Err(e) => println!("Error: {}", e),
+                    };
+                };
             }
             Action::Close(id) => {
                 if let Some(id) = id {

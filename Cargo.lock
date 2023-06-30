@@ -773,6 +773,7 @@ dependencies = [
  "pango",
  "pangocairo",
  "regex",
+ "rofi",
  "rust-embed",
  "serde",
  "serde_json",
@@ -1142,6 +1143,15 @@ name = "rle-decode-fast"
 version = "1.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3582f63211428f83597b51b2ddb88e2a91a9d52d12831f9d08f5e624e8977422"
+
+[[package]]
+name = "rofi"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c4bc8f88160318ab75508e32d837e72ecfac4270d27cdf44315495d614636df6"
+dependencies = [
+ "thiserror",
+]
 
 [[package]]
 name = "rust-embed"

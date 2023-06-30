@@ -208,10 +208,6 @@ You can also specify a path via `nofi_CONFIG` environment variable.
 
 Sets the [logging verbosity](https://docs.rs/log/latest/log/enum.Level.html). Possible values are `error`, `warn`, `info`, `debug` and `trace`.
 
-#### `startup_notification`
-
-Shows a notification at startup if set to `true`.
-
 #### `geometry`
 
 Sets the window geometry. The value format is `<width>x<height>+<x>+<y>`.

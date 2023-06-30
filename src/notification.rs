@@ -83,31 +83,26 @@ impl Notification {
     /// Renders the notification message using the given template.
     pub fn render_message(
         &self,
+        template: &Tera,
         urgency_text: Option<String>,
         unread_count: usize,
     ) -> Result<String> {
-        if let Some(u) = urgency_text {
-            println!("URGENCY_TEXT: {}", u);
+        match template.render(
+            NOTIFICATION_MESSAGE_TEMPLATE,
+            &self.into_context(
+                urgency_text.unwrap_or_else(|| self.urgency.to_string()),
+                unread_count,
+            )?,
+        ) {
+            Ok(v) => Ok(v),
+            Err(e) => {
+                if let Some(error_source) = e.source() {
+                    Err(Error::TemplateRender(error_source.to_string()))
+                } else {
+                    Err(Error::Template(e))
+                }
+            }
         }
-        println!("COUNT: {}", unread_count);
-        println!("{:#?}", self);
-        // match template.render(
-        //     NOTIFICATION_MESSAGE_TEMPLATE,
-        //     &self.into_context(
-        //         urgency_text.unwrap_or_else(|| self.urgency.to_string()),
-        //         unread_count,
-        //     )?,
-        // ) {
-        //     Ok(v) => Ok::<String, Error>(v),
-        //     Err(e) => {
-        //         if let Some(error_source) = e.source() {
-        //             Err(Error::TemplateRender(error_source.to_string()))
-        //         } else {
-        //             Err(Error::Template(e))
-        //         }
-        //     }
-        // }
-        Ok("".to_string())
     }
 
     /// Returns true if the given filter matches the notification message.
@@ -210,6 +205,18 @@ impl Manager {
             .write()
             .expect("failed to retrieve notifications")
             .push(notification);
+    }
+
+    /// Returns all unread notifications.
+    pub fn all_unread(&self) -> Vec<Notification> {
+        let notifications = self.inner.read().expect("failed to retrieve notifications");
+        let notifications = notifications
+            .iter()
+            .filter(|v| !v.is_read)
+            .cloned()
+            .collect::<Vec<Notification>>();
+
+        notifications
     }
 
     /// Returns the last unread notification.

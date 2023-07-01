@@ -1,7 +1,5 @@
 //! A dead simple notification daemon.
 
-#![warn(missing_docs, clippy::unwrap_used)]
-
 /// Error handler.
 pub mod error;
 
@@ -19,7 +17,7 @@ use crate::dbus::DbusServer;
 use crate::error::Result;
 use crate::notification::{Action, NOTIFICATION_MESSAGE_TEMPLATE};
 use notification::Manager;
-use rofi;
+use rofi::Rofi;
 use std::sync::mpsc;
 use std::sync::Arc;
 use std::thread;
@@ -70,9 +68,9 @@ pub fn run() -> Result<()> {
             Action::ShowLast => {
                 tracing::debug!("showing the last notification");
                 let all_notifications = notifications.all_unread();
-                if all_notifications.len() == 0 {
+                if all_notifications.is_empty() {
                     let notification = ["No notifications".to_owned()];
-                    let _no_notifications = rofi::Rofi::new(&notification).run_index();
+                    let _no_notifications = Rofi::new(&notification).run_index();
                 } else {
                     let notification_messages: Vec<String> = all_notifications
                         .iter()
@@ -88,7 +86,7 @@ pub fn run() -> Result<()> {
                             }
                         })
                         .collect();
-                    match rofi::Rofi::new(&notification_messages).run_index() {
+                    match Rofi::new(&notification_messages).run_index() {
                         Ok(element) => notifications.mark_as_read(all_notifications[element].id),
                         Err(rofi::Error::Interrupted) => println!("Interrupted"),
                         Err(rofi::Error::NotFound) => println!("User input was not found"),

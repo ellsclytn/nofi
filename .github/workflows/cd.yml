@@ -46,8 +46,6 @@ jobs:
             --no-install-recommends \
             --allow-unauthenticated \
             libdbus-1-dev \
-            libglib2.0-dev \
-            libpango1.0-dev \
             pkg-config
 
       - name: Install Rust toolchain
@@ -73,15 +71,6 @@ jobs:
             nofi-${{env.RELEASE_VERSION}}/
           sha512sum nofi-${{env.RELEASE_VERSION}}-${{matrix.TARGET}}.tar.gz \
             > nofi-${{env.RELEASE_VERSION}}-${{matrix.TARGET}}.tar.gz.sha512
-
-      - name: Sign the release
-        run: |
-          echo "${{secrets.GPG_RELEASE_KEY}}" | base64 --decode > private.key
-          echo "${{secrets.GPG_PASSPHRASE}}" | gpg --pinentry-mode=loopback \
-            --passphrase-fd 0 --import private.key
-          echo "${{secrets.GPG_PASSPHRASE}}" | gpg --pinentry-mode=loopback \
-            --passphrase-fd 0 --detach-sign \
-            nofi-${{env.RELEASE_VERSION}}-${{matrix.TARGET}}.tar.gz
 
       - name: Upload the binary releases
         uses: svenstaro/upload-release-action@v2

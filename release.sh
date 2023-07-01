@@ -20,11 +20,10 @@ git commit -m "chore(release): prepare for $1"
 git show
 # generate a changelog for the tag message
 changelog=$(git cliff --tag "$1" --unreleased --strip all | sed -e '/^#/d' -e '/^$/d')
-# create a signed tag
+# create a tag
 # https://keyserver.ubuntu.com/pks/lookup?search=0x1B250A9F78535D1A&op=vindex
-git -c user.name="runst" \
+git -c user.name="nofi" \
 	-c user.email="nofi@ellis.codes" \
-	-c user.signingkey="AEF8C7261F4CEB41A448CBC41B250A9F78535D1A" \
 	tag -f -s -a "$1" -m "Release $1" -m "$changelog"
 git tag -v "$1"
 echo "Done!"

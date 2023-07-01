@@ -1,18 +1,12 @@
-<div align="center">
+## nofi
 
-  <a href="https://github.com/ellsclytn/nofi">
-    <img src="assets/nofi-logo.png" width="300">
-  </a>
-
-<h4><strong><code>nofi</code></strong> — A dead simple notification daemon 🦡</h4>
+**A rofi-driven notification manager**
 
 <a href="https://github.com/ellsclytn/nofi/releases"><img src="https://img.shields.io/github/v/release/ellsclytn/nofi?style=flat&amp;labelColor=56534b&amp;color=c1c1b6&amp;logo=GitHub&amp;logoColor=white" alt="GitHub Release"></a>
 <a href="https://crates.io/crates/nofi/"><img src="https://img.shields.io/crates/v/nofi?style=flat&amp;labelColor=56534b&amp;color=c1c1b6&amp;logo=Rust&amp;logoColor=white" alt="Crate Release"></a>
 <a href="https://github.com/ellsclytn/nofi/actions?query=workflow%3A%22Continuous+Integration%22"><img src="https://img.shields.io/github/actions/workflow/status/ellsclytn/nofi/ci.yml?branch=main&amp;style=flat&amp;labelColor=56534b&amp;color=c1c1b6&amp;logo=GitHub%20Actions&amp;logoColor=white" alt="Continuous Integration"></a>
 <a href="https://github.com/ellsclytn/nofi/actions?query=workflow%3A%22Continuous+Deployment%22"><img src="https://img.shields.io/github/actions/workflow/status/ellsclytn/nofi/cd.yml?style=flat&amp;labelColor=56534b&amp;color=c1c1b6&amp;logo=GitHub%20Actions&amp;logoColor=white&amp;label=deploy" alt="Continuous Deployment"></a>
 <a href="https://docs.rs/nofi/"><img src="https://img.shields.io/docsrs/nofi?style=flat&amp;labelColor=56534b&amp;color=c1c1b6&amp;logo=Rust&amp;logoColor=white" alt="Documentation"></a>
-
-</div>
 
 [Desktop notifications](https://wiki.archlinux.org/title/Desktop_notifications) are small, passive popup dialogs that notify the user of particular events in an asynchronous manner. These passive popups can automatically disappear after a short period of time.
 

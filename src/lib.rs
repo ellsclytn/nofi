@@ -15,10 +15,9 @@ pub mod config;
 pub mod notification;
 
 use crate::config::Config;
-use crate::dbus::{DbusClient, DbusServer};
+use crate::dbus::DbusServer;
 use crate::error::Result;
 use crate::notification::{Action, NOTIFICATION_MESSAGE_TEMPLATE};
-use estimated_read_time::Options;
 use notification::Manager;
 use rofi;
 use std::sync::mpsc;
@@ -43,7 +42,6 @@ pub fn run() -> Result<()> {
     tracing::info!("starting");
 
     let dbus_server = DbusServer::init()?;
-    let dbus_client = Arc::new(DbusClient::init()?);
     let timeout = Duration::from_millis(1000);
 
     let notifications = Manager::init();
@@ -53,26 +51,6 @@ pub fn run() -> Result<()> {
         NOTIFICATION_MESSAGE_TEMPLATE,
         &config_cloned.global.template,
     )?;
-
-    let dbus_client_cloned = Arc::clone(&dbus_client);
-    let config_cloned = Arc::clone(&config);
-    let notifications_cloned = notifications.clone();
-
-    // thread::spawn(move || {
-    //     if let Err(e) = x11_cloned.handle_events(
-    //         window_cloned,
-    //         notifications_cloned,
-    //         config_cloned,
-    //         |notification| {
-    //             tracing::debug!("user input detected");
-    //             dbus_client_cloned
-    //                 .close_notification(notification.id, timeout)
-    //                 .expect("failed to close notification");
-    //         },
-    //     ) {
-    //         eprintln!("Failed to handle X11 events: {e}")
-    //     }
-    // });
 
     let (sender, receiver) = mpsc::channel();
 
@@ -87,30 +65,6 @@ pub fn run() -> Result<()> {
         match receiver.recv()? {
             Action::Show(notification) => {
                 tracing::debug!("received notification: {}", notification.id);
-                let timeout = notification.expire_timeout.unwrap_or_else(|| {
-                    let urgency_config = config.get_urgency_config(&notification.urgency);
-                    Duration::from_secs(if urgency_config.auto_clear.unwrap_or(false) {
-                        notification
-                            .render_message(&template, urgency_config.text, 0)
-                            .map(|v| estimated_read_time::text(&v, &Options::default()).seconds())
-                            .unwrap_or_default()
-                    } else {
-                        urgency_config.timeout.into()
-                    })
-                });
-                if !timeout.is_zero() {
-                    tracing::debug!("notification timeout: {}ms", timeout.as_millis());
-                    let dbus_client_cloned = Arc::clone(&dbus_client);
-                    let notifications_cloned = notifications.clone();
-                    // thread::spawn(move || {
-                    //     thread::sleep(timeout);
-                    //     if notifications_cloned.is_unread(notification.id) {
-                    //         dbus_client_cloned
-                    //             .close_notification(notification.id, timeout)
-                    //             .expect("failed to close notification");
-                    //     }
-                    // });
-                }
                 notifications.add(notification);
             }
             Action::ShowLast => {
@@ -150,15 +104,10 @@ pub fn run() -> Result<()> {
                     tracing::debug!("closing the last notification");
                     notifications.mark_last_as_read();
                 }
-                // x11_cloned.hide_window(&window)?;
-                if notifications.get_unread_count() >= 1 {
-                    //     x11_cloned.show_window(&window)?;
-                }
             }
             Action::CloseAll => {
                 tracing::debug!("closing all notifications");
                 notifications.mark_all_as_read();
-                // x11_cloned.hide_window(&window)?;
             }
         }
     }

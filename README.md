@@ -30,7 +30,6 @@
 
 - Fully customizable notification window (size, location, text, colors).
 - Template-powered ([Jinja2](http://jinja.pocoo.org/)/[Django](https://docs.djangoproject.com/en/3.1/topics/templates/)) notification text.
-- Auto-clear notifications based on a fixed time or estimated read time.
 - Run custom OS commands based on the matched notifications.
 
 ## Roadmap
@@ -208,22 +207,6 @@ You can also specify a path via `nofi_CONFIG` environment variable.
 
 Sets the [logging verbosity](https://docs.rs/log/latest/log/enum.Level.html). Possible values are `error`, `warn`, `info`, `debug` and `trace`.
 
-#### `geometry`
-
-Sets the window geometry. The value format is `<width>x<height>+<x>+<y>`.
-
-For setting this value, I recommend using a tool like [slop](https://github.com/naelstrof/slop) which helps with querying for a selection and printing the region to stdout.
-
-#### `wrap_content`
-
-If set to `true`, the window is resized to match the contents.
-
-If the content is larger than the window size, `geometry` option is used for maximum width and height.
-
-#### `font`
-
-Sets the font to use for the window.
-
 #### `template`
 
 Sets the template for the notification message. The syntax is based on [Jinja2](http://jinja.pocoo.org/) and [Django](https://docs.djangoproject.com/en/3.1/topics/templates/) templates.
@@ -288,10 +271,6 @@ You can configure `nofi` to act differently based on these urgency levels. For t
 #### `timeout`
 
 This is the default timeout value (in seconds) if the notification has no timeout specified by the sender. If the timeout is 0, the notification is not automatically closed (i.e. it never expires).
-
-#### `auto_clear`
-
-If set to `true`, the **estimated read time** of the notification is calculated and it is used as the timeout. This is useful if you want the notifications to disappear as you finish reading them.
 
 #### `text`
 

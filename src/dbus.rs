@@ -1,12 +1,11 @@
 use crate::error;
 use crate::notification::{Action, Notification};
-use dbus::arg::{RefArg, Variant};
-use dbus::blocking::{Connection, Proxy};
+use dbus::arg::RefArg;
+use dbus::blocking::Connection;
 use dbus::channel::MatchingReceiver;
 use dbus::message::MatchRule;
 use dbus::MethodErr;
 use dbus_crossroads::Crossroads;
-use std::collections::HashMap;
 use std::sync::atomic::{AtomicU32, Ordering};
 use std::sync::mpsc::Sender;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
@@ -198,80 +197,5 @@ impl DbusServer {
         loop {
             self.connection.process(timeout)?;
         }
-    }
-}
-
-/// Wrapper for a [`D-Bus connection`] without the server part.
-///
-/// [`D-Bus connection`]: Connection
-pub struct DbusClient {
-    /// Connection to D-Bus.
-    connection: Connection,
-}
-
-unsafe impl Send for DbusClient {}
-unsafe impl Sync for DbusClient {}
-
-impl DbusClient {
-    /// Initializes the D-Bus controller.
-    pub fn init() -> error::Result<Self> {
-        let connection = Connection::new_session()?;
-        Ok(Self { connection })
-    }
-
-    /// Sends a notification.
-    ///
-    /// See `org.freedesktop.Notifications.Notify`
-    pub fn notify<S: Into<String>>(
-        &self,
-        app_name: S,
-        summary: S,
-        body: S,
-        expire_timeout: i32,
-    ) -> error::Result<()> {
-        let proxy = Proxy::new(
-            NOTIFICATION_INTERFACE,
-            NOTIFICATION_PATH,
-            Duration::from_millis(1000),
-            &self.connection,
-        );
-        proxy.method_call(
-            NOTIFICATION_INTERFACE,
-            "Notify",
-            (
-                app_name.into(),
-                0_u32,
-                String::new(),
-                summary.into(),
-                body.into(),
-                Vec::<String>::new(),
-                {
-                    let mut hints = HashMap::<String, Variant<Box<dyn RefArg + 'static>>>::new();
-                    hints.insert(String::from("urgency"), Variant(Box::new(0_u8)));
-                    hints
-                },
-                expire_timeout,
-            ),
-        )?;
-        Ok(())
-    }
-
-    /// Closes the notification.
-    ///
-    /// See `org.freedesktop.Notifications.CloseNotification`
-    pub fn close_notification(&self, id: u32, timeout: Duration) -> error::Result<()> {
-        tracing::trace!(
-            "sending close signal for notification: {} (timeout: {}ms)",
-            id,
-            timeout.as_millis()
-        );
-        let proxy = Proxy::new(
-            NOTIFICATION_INTERFACE,
-            NOTIFICATION_PATH,
-            timeout,
-            &self.connection,
-        );
-        proxy.method_call(NOTIFICATION_INTERFACE, "CloseNotification", (id,))?;
-        Ok(())
     }
 }

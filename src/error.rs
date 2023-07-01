@@ -12,8 +12,6 @@ pub enum Error {
     DbusString(String),
     #[error("D-Bus argument error: `{0}`")]
     DbusArgument(String),
-    #[error("Cairo error: `{0}`")]
-    Cairo(#[from] cairo::Error),
     #[error("Receiver error: `{0}`")]
     Receiver(#[from] std::sync::mpsc::RecvError),
     #[error("TOML parsing error: `{0}`")]

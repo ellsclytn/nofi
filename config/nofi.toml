@@ -1,9 +1,6 @@
 [global]
     log_verbosity = "info"
-    geometry = "340x25+0+0"
-    wrap_content = true
-    font = "Monospace 10"
-    template = "[{{app_name}}]{% if unread_count > 1 %} ({{unread_count}}){% endif %} {{summary}}"
+    template = "[{{app_name}}]{% if unread_count > 1 %} ({{unread_count}}){% endif %} {{summary}}{% if body %} - {{body}}{% endif %}"
 
 [urgency_low]
     background = "#000000"

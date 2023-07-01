@@ -5,7 +5,6 @@ use rust_embed::RustEmbed;
 use serde::de::{Deserializer, Error as SerdeError};
 use serde::ser::Serializer;
 use serde::{Deserialize, Serialize};
-use sscanf::scanf;
 use std::env;
 use std::fs;
 use std::path::PathBuf;
@@ -86,13 +85,6 @@ pub struct GlobalConfig {
     /// Log verbosity.
     #[serde(deserialize_with = "deserialize_level_from_string", skip_serializing)]
     pub log_verbosity: Level,
-    /// Geometry of the notification window.
-    #[serde(deserialize_with = "deserialize_geometry_from_string")]
-    pub geometry: Geometry,
-    /// Whether if the window will be resized to wrap the content.
-    pub wrap_content: bool,
-    /// Text font.
-    pub font: String,
     /// Template for the notification message.
     pub template: String,
 }
@@ -104,42 +96,6 @@ where
 {
     let value: String = Deserialize::deserialize(deserializer)?;
     Level::from_str(&value).map_err(SerdeError::custom)
-}
-
-/// Custom deserializer implementation for converting `String` to [`Geometry`]
-fn deserialize_geometry_from_string<'de, D>(deserializer: D) -> StdResult<Geometry, D::Error>
-where
-    D: Deserializer<'de>,
-{
-    let value: String = Deserialize::deserialize(deserializer)?;
-    Geometry::from_str(&value).map_err(SerdeError::custom)
-}
-
-/// Window geometry.
-#[derive(Debug, Deserialize, Serialize)]
-pub struct Geometry {
-    /// Width of the window.
-    pub width: u32,
-    /// Height of the window.
-    pub height: u32,
-    /// X coordinate.
-    pub x: u32,
-    /// Y coordinate.
-    pub y: u32,
-}
-
-impl FromStr for Geometry {
-    type Err = Error;
-    fn from_str(s: &str) -> StdResult<Self, Self::Err> {
-        let (width, height, x, y) =
-            scanf!(s, "{u32}x{u32}+{u32}+{u32}").map_err(|e| Error::Scanf(e.to_string()))?;
-        Ok(Self {
-            width,
-            height,
-            x,
-            y,
-        })
-    }
 }
 
 /// Urgency configuration.

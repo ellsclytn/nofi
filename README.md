@@ -147,6 +147,19 @@ bindsym $mod+grave exec dbus-send --print-reply \
         --dest=org.freedesktop.Notifications /org/freedesktop/Notifications/ctl org.freedesktop.Notifications.History
 ```
 
+### Status Bar Integration
+
+`nofi` broadcasts notification counts over a UNIX socket in the same format as [Rofication](https://github.com/DaveDavenport/Rofication). This means it can be integrated into status bars like [i3status-rust](https://github.com/greshake/i3status-rust/) via the [Rofication block](https://docs.rs/i3status-rs/latest/i3status_rs/blocks/rofication/index.html). The socket path follows the [XDG Base Directory](https://wiki.archlinux.org/title/XDG_Base_Directory) specification which usually exposes the socket at `/run/user/<UID>/nofi/socket`. This may vary between systems, so the socket path is output to `stdout` when `nofi` starts.
+
+```ini
+# Example i3status-rust integration
+
+[[block]]
+block = "rofication"
+interval = 1
+socket_path = "/run/user/1000/nofi/socket"
+```
+
 ## Configuration
 
 `nofi` configuration file supports [TOML](https://github.com/toml-lang/toml) format and the default configuration values can be found [here](./config/nofi.toml).

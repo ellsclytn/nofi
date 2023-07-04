@@ -12,12 +12,16 @@ pub mod config;
 /// Notification manager.
 pub mod notification;
 
+/// Socket handler.
+pub mod socket;
+
 use crate::config::Config;
 use crate::dbus::DbusServer;
 use crate::error::Result;
 use crate::notification::{Action, NOTIFICATION_MESSAGE_TEMPLATE};
 use notification::Manager;
 use rofi::Rofi;
+use socket::Socket;
 use std::sync::mpsc;
 use std::sync::Arc;
 use std::thread;
@@ -44,7 +48,9 @@ pub fn run() -> Result<()> {
     let dbus_server = DbusServer::init()?;
     let timeout = Duration::from_millis(1000);
 
+    let unix_socket = Socket::init(&xdg_dirs)?;
     let notifications = Manager::init();
+    let unix_socket = Arc::new(unix_socket);
     let config_cloned = Arc::clone(&config);
     let mut template = Tera::default();
     template.add_raw_template(
@@ -66,6 +72,7 @@ pub fn run() -> Result<()> {
             Action::Show(notification) => {
                 tracing::debug!("received notification: {}", notification.id);
                 notifications.add(notification);
+                unix_socket.update(notifications.counts());
             }
             Action::ShowLast => {
                 tracing::debug!("showing the last notification");
@@ -89,7 +96,15 @@ pub fn run() -> Result<()> {
                         })
                         .collect();
                     match Rofi::new(&notification_messages).run_index() {
-                        Ok(element) => notifications.mark_as_read(all_notifications[element].id),
+                        Ok(element) => {
+                            notifications.mark_as_read(all_notifications[element].id);
+
+                            let counts = notifications.counts();
+                            let socket_count = unix_socket.count.clone();
+                            let mut socket_count =
+                                socket_count.write().expect("failed to write to socket");
+                            *socket_count = counts;
+                        }
                         Err(rofi::Error::Interrupted) => println!("Interrupted"),
                         Err(rofi::Error::NotFound) => println!("User input was not found"),
                         Err(e) => println!("Error: {}", e),
@@ -104,10 +119,12 @@ pub fn run() -> Result<()> {
                     tracing::debug!("closing the last notification");
                     notifications.mark_last_as_read();
                 }
+                unix_socket.update(notifications.counts());
             }
             Action::CloseAll => {
                 tracing::debug!("closing all notifications");
                 notifications.mark_all_as_read();
+                unix_socket.update(notifications.counts());
             }
         }
     }

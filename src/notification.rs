@@ -199,6 +199,18 @@ impl Manager {
             .len()
     }
 
+    /// Returns the number of normal and urgent notifications.
+    pub fn counts(&self) -> (usize, usize) {
+        let normal = self.all_unread().len();
+        let notifications = self.inner.read().expect("failed to retrieve notifications");
+        let urgent = notifications
+            .iter()
+            .filter(|v| !v.is_read && matches!(v.urgency, Urgency::Critical))
+            .count();
+
+        (normal, urgent)
+    }
+
     /// Adds a new notifications to manage.
     pub fn add(&self, notification: Notification) {
         self.inner

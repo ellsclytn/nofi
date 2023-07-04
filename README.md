@@ -91,7 +91,7 @@ If you are using a [display manager](https://wiki.archlinux.org/title/Display_ma
 
 The xprofile file, which is `~/.xprofile` or `/etc/xprofile`, can be styled similarly to [xinitrc](#xinitrc).
 
-### As a D-Bus service
+#### As a D-Bus service
 
 You can create a D-Bus service to launch `nofi` automatically on the first notification action. For example, you can create the following service configuration:
 
@@ -105,7 +105,7 @@ Exec=/usr/bin/nofi
 
 Whenever an application sends a notification by sending a signal to `org.freedesktop.Notifications`, D-Bus activates `nofi`.
 
-### As a systemd service
+#### As a systemd service
 
 `~/.config/systemd/user/nofi.service`:
 

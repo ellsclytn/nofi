@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.0] - 2023-07-04
+
+### 🚀 Features
+
+- *(socket)* Add UNIX socket for notification counts
+
+### 🚜 Refactor
+- *(no category)* Switch to xdg for config loading
+
+
+### 📚 Documentation
+
+- *(readme)* Refactor from runst to nofi specifics
+- *(readme)* Fix heading levels
+
 ## [0.1.0] - 2023-07-01
 
 ### 🚀 Features

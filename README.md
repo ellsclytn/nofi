@@ -151,12 +151,7 @@ bindsym $mod+grave exec dbus-send --print-reply \
 
 `nofi` configuration file supports [TOML](https://github.com/toml-lang/toml) format and the default configuration values can be found [here](./config/nofi.toml).
 
-If exists, configuration file is read from the following default locations:
-
-- `$HOME/.config/nofi/nofi.toml`
-- `$HOME/.nofi/nofi.toml`
-
-You can also specify a path via `NOFI_CONFIG` environment variable.
+Configuration overrides can be placed in `$HOME/.config/nofi/nofi.toml`, or at a path of your choosing by specifying a `NOFI_CONFIG` environment variable.
 
 ### Global configuration
 

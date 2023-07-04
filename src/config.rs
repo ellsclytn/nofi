@@ -14,6 +14,7 @@ use std::str::{self, FromStr};
 use std::time::{SystemTime, UNIX_EPOCH};
 use tera::Tera;
 use tracing::Level;
+use xdg::BaseDirectories;
 
 /// Environment variable for the configuration file.
 const CONFIG_ENV: &str = "NOFI_CONFIG";
@@ -41,14 +42,10 @@ pub struct Config {
 
 impl Config {
     /// Parses the configuration file.
-    pub fn parse() -> Result<Self> {
+    pub fn parse(xdg_dirs: &BaseDirectories) -> Result<Self> {
         for config_path in [
             env::var(CONFIG_ENV).ok().map(PathBuf::from),
-            dirs::config_dir().map(|p| p.join(env!("CARGO_PKG_NAME")).join(DEFAULT_CONFIG)),
-            dirs::home_dir().map(|p| {
-                p.join(format!(".{}", env!("CARGO_PKG_NAME")))
-                    .join(DEFAULT_CONFIG)
-            }),
+            Some(xdg_dirs.place_config_file(DEFAULT_CONFIG)?),
         ]
         .iter()
         .flatten()

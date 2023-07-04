@@ -24,10 +24,12 @@ use std::thread;
 use std::time::Duration;
 use tera::Tera;
 use tracing_subscriber::EnvFilter;
+use xdg::BaseDirectories;
 
 /// Runs `nofi`.
 pub fn run() -> Result<()> {
-    let config = Arc::new(Config::parse()?);
+    let xdg_dirs = BaseDirectories::with_prefix(env!("CARGO_PKG_NAME"))?;
+    let config = Arc::new(Config::parse(&xdg_dirs)?);
 
     tracing_subscriber::fmt()
         .with_env_filter(

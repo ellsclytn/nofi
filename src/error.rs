@@ -28,6 +28,8 @@ pub enum Error {
     TemplateRender(String),
     #[error("System time error: `{0}`")]
     SystemTime(#[from] std::time::SystemTimeError),
+    #[error("XDG base directories error: `{0}`")]
+    Xdg(#[from] xdg::BaseDirectoriesError),
     #[error("Config error: `{0}`")]
     Config(String),
 }

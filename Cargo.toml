@@ -16,7 +16,7 @@ rust-version = "1.64.0"
 [dependencies]
 dbus = "0.9.7"
 dbus-crossroads = "0.5.2"
-thiserror = "1.0.40"
+thiserror = "1.0.41"
 serde = { version = "1.0.164", features = ["derive"] }
 toml = "0.7.5"
 colorsys = "0.6.7"

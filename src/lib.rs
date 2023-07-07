@@ -67,6 +67,8 @@ pub fn run() -> Result<()> {
             .expect("failed to register D-Bus notification handler");
     });
 
+    let mut menu_open = false;
+
     loop {
         match receiver.recv()? {
             Action::Show(notification) => {
@@ -77,6 +79,12 @@ pub fn run() -> Result<()> {
             Action::ShowLast => {
                 tracing::debug!("showing the last notification");
                 let all_notifications = notifications.all_unread();
+
+                if menu_open {
+                    return Ok(());
+                }
+
+                menu_open = true;
                 if all_notifications.is_empty() {
                     let notification = ["No notifications".to_owned()];
                     let _no_notifications = Rofi::new(&notification).run_index();
@@ -109,6 +117,8 @@ pub fn run() -> Result<()> {
                         Err(rofi::Error::NotFound) => println!("User input was not found"),
                         Err(e) => println!("Error: {}", e),
                     };
+
+                    menu_open = false;
                 };
             }
             Action::Close(id) => {

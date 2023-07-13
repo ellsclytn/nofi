@@ -1,0 +1,5 @@
+pre-push:
+  commands:
+    clippy:
+      glob: "*.rs"
+      run: cargo clippy -- -D warnings

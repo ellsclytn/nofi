@@ -15,12 +15,14 @@ pub mod notification;
 /// Socket handler.
 pub mod socket;
 
+/// Rofi handler
+pub mod rofi;
+
 use crate::config::Config;
 use crate::dbus::DbusServer;
 use crate::error::Result;
 use crate::notification::{Action, NOTIFICATION_MESSAGE_TEMPLATE};
 use notification::Manager;
-use rofi::Rofi;
 use socket::Socket;
 use std::sync::mpsc;
 use std::sync::Arc;
@@ -57,6 +59,8 @@ pub fn run() -> Result<()> {
         NOTIFICATION_MESSAGE_TEMPLATE,
         &config_cloned.global.template,
     )?;
+    let config_cloned = Arc::clone(&config);
+    let mut menu = rofi::Menu::init(config_cloned, template);
 
     let (sender, receiver) = mpsc::channel();
 
@@ -67,8 +71,6 @@ pub fn run() -> Result<()> {
             .expect("failed to register D-Bus notification handler");
     });
 
-    let mut menu_open = false;
-
     loop {
         match receiver.recv()? {
             Action::Show(notification) => {
@@ -77,49 +79,14 @@ pub fn run() -> Result<()> {
                 unix_socket.update(notifications.counts());
             }
             Action::ShowLast => {
-                tracing::debug!("showing the last notification");
+                tracing::debug!("listing notifications");
                 let all_notifications = notifications.all_unread();
+                let selected_notification = menu.list(&all_notifications);
 
-                if menu_open {
-                    return Ok(());
+                if let Some(id) = selected_notification {
+                    notifications.mark_as_read(id);
+                    unix_socket.update(notifications.counts());
                 }
-
-                menu_open = true;
-                if all_notifications.is_empty() {
-                    let notification = ["No notifications".to_owned()];
-                    let _no_notifications = Rofi::new(&notification).run_index();
-                } else {
-                    let notification_messages: Vec<String> = all_notifications
-                        .iter()
-                        .map(|n| {
-                            let urgency_config = config.get_urgency_config(&n.urgency);
-                            let render = n.render_message(&template, urgency_config.text, 0);
-                            match render {
-                                Ok(v) => v,
-                                Err(e) => {
-                                    tracing::error!("error rendering notification: {}", e);
-                                    "Failed to render notification".to_string()
-                                }
-                            }
-                        })
-                        .collect();
-                    match Rofi::new(&notification_messages).run_index() {
-                        Ok(element) => {
-                            notifications.mark_as_read(all_notifications[element].id);
-
-                            let counts = notifications.counts();
-                            let socket_count = unix_socket.count.clone();
-                            let mut socket_count =
-                                socket_count.write().expect("failed to write to socket");
-                            *socket_count = counts;
-                        }
-                        Err(rofi::Error::Interrupted) => println!("Interrupted"),
-                        Err(rofi::Error::NotFound) => println!("User input was not found"),
-                        Err(e) => println!("Error: {}", e),
-                    };
-
-                    menu_open = false;
-                };
             }
             Action::Close(id) => {
                 if let Some(id) = id {

@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.1] - 2023-07-14
+
+### 🐛 Bug Fixes
+
+- *(rofi)* Prevent opening more than one menu
+
+### 🚜 Refactor
+
+- *(rofi)* Move rofi handler to own module
+
+### Build
+- *(no category)* Add Clippy as a pre-push hook
+
+
 ## [0.2.0] - 2023-07-04
 
 ### 🚀 Features

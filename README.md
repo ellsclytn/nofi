@@ -35,6 +35,14 @@ $ cargo install nofi
 
 The minimum supported Rust version is `1.64.0`.
 
+### Arch Linux
+
+`nofi` can be installed from the [AUR](https://aur.archlinux.org/packages/nofi-bin) using an [AUR helper](https://wiki.archlinux.org/title/AUR_helpers). For example:
+
+```sh
+aura -A nofi-bin
+```
+
 ### Binary releases
 
 See the available binaries for different operating systems/architectures from the [releases page](https://github.com/ellsclytn/nofi/releases).

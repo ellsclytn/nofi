@@ -60,7 +60,7 @@ pub fn run() -> Result<()> {
         &config_cloned.global.template,
     )?;
     let config_cloned = Arc::clone(&config);
-    let mut menu = rofi::Menu::init(config_cloned, template);
+    let menu = Arc::new(rofi::Menu::init(config_cloned, template));
 
     let (sender, receiver) = mpsc::channel();
 
@@ -80,13 +80,19 @@ pub fn run() -> Result<()> {
             }
             Action::ShowLast => {
                 tracing::debug!("listing notifications");
+                let notifications = notifications.clone();
                 let all_notifications = notifications.all_unread();
-                let selected_notification = menu.list(&all_notifications);
+                let menu_cloned = menu.clone();
+                let unix_socket = unix_socket.clone();
 
-                if let Some(id) = selected_notification {
-                    notifications.mark_as_read(id);
-                    unix_socket.update(notifications.counts());
-                }
+                thread::spawn(move || {
+                    let selected_notification = menu_cloned.list(&all_notifications);
+
+                    if let Some(id) = selected_notification {
+                        notifications.mark_as_read(id);
+                        unix_socket.update(notifications.counts());
+                    }
+                });
             }
             Action::Close(id) => {
                 if let Some(id) = id {

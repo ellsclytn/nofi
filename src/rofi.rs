@@ -1,34 +1,45 @@
 use crate::{config::Config, notification::Notification};
 use ::rofi::Rofi;
-use std::sync::Arc;
+use std::sync::{Arc, RwLock};
 use tera::Tera;
 
 const NO_NOTIFICATIONS_MENU: [&str; 1] = ["No notifications"];
 
 pub struct Menu {
-    open: bool,
+    open: Arc<RwLock<()>>,
     config: Arc<Config>,
-    template: Tera,
+    template: Arc<Tera>,
+}
+
+impl Clone for Menu {
+    fn clone(&self) -> Self {
+        Self {
+            open: Arc::clone(&self.open),
+            config: self.config.clone(),
+            template: Arc::clone(&self.template),
+        }
+    }
 }
 
 impl Menu {
     pub fn init(config: Arc<Config>, template: Tera) -> Self {
         Self {
             config,
-            open: false,
-            template,
+            open: Arc::new(RwLock::new(())),
+            template: Arc::new(template),
         }
     }
 
-    pub fn list(&mut self, notifications: &Vec<Notification>) -> Option<u32> {
-        if self.open {
-            return None;
-        }
+    pub fn list(&self, notifications: &Vec<Notification>) -> Option<u32> {
+        let open = self.open.try_write();
 
-        self.open = true;
+        if let Err(e) = open {
+            tracing::warn!("failed to acquire lock. Rofi may already be open: {}", e);
+            return None;
+        };
+
         if notifications.is_empty() {
             let _no_notifications = Rofi::new(&NO_NOTIFICATIONS_MENU).run_index();
-            self.open = false;
 
             return None;
         }
@@ -47,8 +58,6 @@ impl Menu {
                 }
             })
             .collect();
-
-        self.open = false;
 
         match Rofi::new(&notification_messages).run_index() {
             Ok(element) => Some(notifications[element].id),

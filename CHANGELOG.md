@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.2] - 2023-07-15
+
+### 🐛 Bug Fixes
+
+- *(socket)* Fix Rofi blocking socket updates
+
+### 📚 Documentation
+
+- *(readme)* Add Arch Linux installation instructions
+
+### ⚙️ Miscellaneous Tasks
+
+- *(deps)* Bump rust-embed from 6.7.0 to 6.8.1
+- *(deps)* Bump toml from 0.7.5 to 0.7.6
+- *(deps)* Bump regex from 1.8.4 to 1.9.1
+- *(deps)* Bump thiserror from 1.0.40 to 1.0.43
+- *(deps)* Bump serde from 1.0.164 to 1.0.171
+- *(deps)* Bump serde_json from 1.0.99 to 1.0.102
+
 ## [0.2.1] - 2023-07-14
 
 ### 🐛 Bug Fixes

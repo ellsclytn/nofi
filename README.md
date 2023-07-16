@@ -8,7 +8,7 @@
 <a href="https://github.com/ellsclytn/nofi/actions?query=workflow%3A%22Continuous+Deployment%22"><img src="https://img.shields.io/github/actions/workflow/status/ellsclytn/nofi/cd.yml?style=flat&amp;labelColor=56534b&amp;color=c1c1b6&amp;logo=GitHub%20Actions&amp;logoColor=white&amp;label=deploy" alt="Continuous Deployment"></a>
 <a href="https://docs.rs/nofi/"><img src="https://img.shields.io/docsrs/nofi?style=flat&amp;labelColor=56534b&amp;color=c1c1b6&amp;logo=Rust&amp;logoColor=white" alt="Documentation"></a>
 
-![](./nofi.png)
+https://github.com/ellsclytn/nofi/assets/8725013/b3c5e53b-7ba9-44bd-a920-81a408b84cb9
 
 `nofi` is a distraction-free notification center. While most notification daemons make immediate popups a key function, `nofi` is designed with such functionality as an anti-feature: notifications are intended to be viewed, but not to annoy. Notifications can be viewed at the user's discretion by launching `nofi`'s Rofi-driven notification manager.
 

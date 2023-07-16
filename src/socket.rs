@@ -45,11 +45,10 @@ impl Socket {
 
                 let (normal, urgent) = *count_cloned.read().unwrap();
                 let message = format!("{},{}", normal, urgent);
-                let result = client.write(message.as_bytes());
 
-                match result {
-                    Ok(_) => println!("Sent {}", message),
-                    Err(e) => println!("Error: {}", e),
+                match client.write(message.as_bytes()) {
+                    Ok(_) => tracing::debug!("Sent counts: {}", message),
+                    Err(e) => tracing::error!("Error sending notification counts: {}", e),
                 }
             }
         });

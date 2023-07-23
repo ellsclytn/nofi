@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.3] - 2023-07-23
+
+### 🐛 Bug Fixes
+
+- *(socket)* Use appropriate log levels for socket writing
+
+### 📚 Documentation
+
+- *(readme)* Add video to README
+
+### ⚙️ Miscellaneous Tasks
+
+- *(deps)* Update dependencies
+
 ## [0.2.2] - 2023-07-15
 
 ### 🐛 Bug Fixes

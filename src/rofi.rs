@@ -59,9 +59,18 @@ impl Menu {
             })
             .collect();
 
-        match Rofi::new(&notification_messages).run_index() {
-            Ok(element) => Some(notifications[element].id),
-            _ => None,
+        let element = if let Ok(element) = Rofi::new(&notification_messages).run_index() {
+            element
+        } else {
+            return None;
+        };
+
+        let id = notifications.get(element).map(|n| n.id);
+
+        if id.is_none() {
+            tracing::error!("failed to get notification id from notifications list at element: {}. notifications: {:#?}", element, notifications);
         }
+
+        id
     }
 }

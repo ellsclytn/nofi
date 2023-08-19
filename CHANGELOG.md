@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.4] - 2023-08-19
+
+### 🐛 Bug Fixes
+- *(no category)* Avoid panic on notifications access
+
+
+### ⚙️ Miscellaneous Tasks
+
+- *(deps)* Bump xdg from 2.5.0 to 2.5.2
+- *(deps)* Bump regex from 1.9.1 to 1.9.3
+- *(deps)* Bump serde_json from 1.0.103 to 1.0.105
+- *(deps)* Bump thiserror from 1.0.44 to 1.0.47
+- *(deps)* Bump serde from 1.0.174 to 1.0.179
+
 ## [0.2.3] - 2023-07-23
 
 ### 🐛 Bug Fixes
